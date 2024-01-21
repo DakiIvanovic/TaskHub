@@ -7,6 +7,12 @@
     
     <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Use a gradient background for the body */
+        body {
+            background: linear-gradient(to right, #f0f2f0, #96deda);
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
 

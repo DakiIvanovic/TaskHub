@@ -42,14 +42,16 @@ Route::middleware(['auth', 'role:' . User::ROLE_ADMIN])->group(function () {
         return redirect()->route('admin.dashboard');
     })->name('admin.dashboard');
 
-    Route::get('/admin/tasks', [TaskController::class, 'index'])->name('admin.tasks.index');
-    Route::get('/admin/tasks/create', [TaskController::class, 'create'])->name('admin.tasks.create');
-    Route::post('/admin/tasks', [TaskController::class, 'store'])->name('admin.tasks.store');
 
-    Route::get('/admin/users/edit/{user}', [AdminController::class, 'edit'])->name('admin.users.edit');
-    Route::delete('/admin/users/destroy/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
-    Route::put('/admin/users/update/{user}', [AdminController::class, 'update'])->name('admin.users.update');
+    Route::get('/admin/tasks', [TaskController::class, 'retrieveTasks'])->name('admin.tasks.index');
+    Route::get('/admin/tasks/create', [TaskController::class, 'retrieveUsers'])->name('admin.tasks.create');
+    Route::post('/admin/tasks', [TaskController::class, 'saveTask'])->name('admin.tasks.store');
+
+    Route::get('/admin/users/edit/{user}', [AdminController::class, 'editUser'])->name('admin.users.edit');
+    Route::delete('/admin/users/destroy/{user}', [AdminController::class, 'deleteUser'])->name('admin.users.destroy');
+    Route::put('/admin/users/update/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
     Route::get('/admin/users/assign-task/{user}', [AdminController  ::class, 'assignTask'])->name('admin.users.assignTask');
+    Route::get('/admin/dashboard', [AdminController::class, 'searchUserByNameOrEmail'])->name('admin.dashboard');
 
 });
 

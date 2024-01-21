@@ -9,21 +9,21 @@ use App\Models\User;
 class TaskController extends Controller
 {
 
-    public function create()
+    public function retrieveUsers()
     {
         $users = User::where('roles', User::ROLE_USER)->get();
         return view('admin.tasks.create', compact('users'));
     }
 
-    public function index()
+    public function retrieveTasks()
     {
         $tasks = Task::with('user')->get();
         $users = User::where('roles', User::ROLE_USER)->get();
     
         return view('admin.tasks.index', compact('tasks', 'users'));
     }
-
-    public function store(Request $request)
+    
+    public function saveTask(Request $request)
     {
         $request->validate([
             'title' => 'required',
