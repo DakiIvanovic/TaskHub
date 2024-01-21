@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\User;
 
 class RoleController extends Controller
 {
@@ -15,8 +16,8 @@ class RoleController extends Controller
         $user = auth()->user();
 
         if($user->roles == 'admin'){
-            $tasks = Task::all();
-            return view('admin.tasks.index', compact('tasks'));
+            $users = User::where('roles','user')->get();
+            return view('admin.dashboard', compact('users'));
         }else{
             $userTasks = Task::where('assigned_to', $user->id)->get();
             return view('user.dashboard', compact('userTasks'));
