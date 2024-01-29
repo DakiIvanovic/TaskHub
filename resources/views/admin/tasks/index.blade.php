@@ -59,7 +59,7 @@
 </head>
 <body class="bg-gray-100">
 
-<nav class="bg-white p-4 shadow-lg">
+<nav class="bg-transparent p-4 ">
 
     <div class="flex items-center justify-between">
         <a href="#" class="text-2xl text-gray-800 font-semibold ml-2 mr-7">Task Management</a>

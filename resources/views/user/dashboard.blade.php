@@ -5,9 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/fontawesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+
 
     <!-- Custom Styles -->
     <style>
@@ -17,19 +20,6 @@
 
         .container {
             margin: 50px auto;
-        }
-
-        .nav-container {
-            background-color: #ffffff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-container a {
-            color: #1a202c;
-        }
-
-        .nav-container button {
-            color: #1a202c;
         }
 
         .task-container {
@@ -65,14 +55,17 @@
 
 <body>
 
-    <nav class="nav-container p-4 shadow-lg">
+    <nav class="nav-container p-4 ">
         <div class="flex items-center justify-between">
-            <a href="#" class="text-2xl text-gray-800 font-semibold">Task Management</a>
-
+            <a href="{{route('user.dashboard')}}" class="text-2xl text-gray-800 font-semibold">Task Management</a>
+            <a href="{{ route('user.inbox') }}" class="text-gray-800 hover:text-blue-600 transition duration-300">
+                <i class="fa-regular fa-envelope fa-lg"><span style="margin-left: 10px;">Chat</span></i>
+            </a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
                 <button type="submit" class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
             </form>
+            
         </div>
     </nav>
 
@@ -89,7 +82,6 @@
                     <p>Description: {{ $task->description }}</p>
                 </div>
                 @endforeach
-
             </div>
         </div>
     </div>

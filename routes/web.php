@@ -23,7 +23,7 @@ use App\Http\Controllers\AdminController;
 // });
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Route::middleware(['auth', 'role:' . User::ROLE_USER])->group(function () {
@@ -34,6 +34,9 @@ Route::middleware(['auth', 'role:' . User::ROLE_USER])->group(function () {
         return view('user.dashboard');
     })->name('user.dashboard');
     Route::get('/user', [UserDashboardController::class, 'userTasks'])->name('user.dashboard');
+    Route::get('/user/inbox', [UserDashboardController::class, 'userInbox'])->name('user.inbox');
+    Route::post('/user/messages/reply', [UserDashboardController::class, 'replyStore'])->name('user.replyStore');
+
 });
 
 
@@ -50,7 +53,6 @@ Route::middleware(['auth', 'role:' . User::ROLE_ADMIN])->group(function () {
     Route::get('/admin/users/edit/{user}', [AdminController::class, 'editUser'])->name('admin.users.edit');
     Route::delete('/admin/users/destroy/{user}', [AdminController::class, 'deleteUser'])->name('admin.users.destroy');
     Route::put('/admin/users/update/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
-    Route::get('/admin/users/assign-task/{user}', [AdminController  ::class, 'assignTask'])->name('admin.users.assignTask');
     Route::get('/admin/dashboard', [AdminController::class, 'searchUserByNameOrEmail'])->name('admin.dashboard');
 
 });
