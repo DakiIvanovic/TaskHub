@@ -145,23 +145,32 @@
                 </div>
 
                 <div class="chat-messages">
-                    @forelse ($userMessages[$user->id] as $message)
-                        <div class="message-card {{ $message->sender_id === auth()->id() ? 'sent-message' : 'received-message' }}">
-                            <strong>{{ $message->sender_name }}:</strong> {{ $message->text }}
-                            <div class="text-white-500 text-sm">{{ $message->created_at }}</div>
-                        </div>
-                    @empty
-                        <p class="text-center">No messages yet.</p>
-                    @endforelse
+                @forelse ($userMessages[$user->id] as $message)
+    <div class="message-card {{ $message->sender_id === auth()->id() ? 'sent-message' : 'received-message' }}">
+        <strong>{{ $message->sender_name }}:</strong>
+        @if ($message->image_path)
+            <img src="{{ asset($message->image_path) }}" alt="Image" style="max-width: 200px; max-height: 200px;">
+        @else
+            {{ $message->text }}
+        @endif
+        <div class="text-white-500 text-sm">{{ $message->created_at }}</div>
+    </div>
+@empty
+    <p class="text-center">No messages yet.</p>
+@endforelse
+
+
                 </div>
 
                 <div class="reply-container">
-                    <form action="{{ route('user.replyStore') }}" method="POST">
-                        @csrf
-                        <input type="hidden" name="sender_id" value="{{ $user->id }}">
-                        <textarea name="msg" rows="4" class="textarea" placeholder="Start a new chat"></textarea>
-                        <button class="btn" type="submit">Send</button>
-                    </form>
+                <form action="{{ route('user.replyStore') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    <input type="hidden" name="sender_id" value="{{ $user->id }}">
+    <textarea name="msg" rows="4" class="textarea" placeholder="Start a new chat"></textarea>
+    <input type="file" name="image" accept="image/*">
+    <button class="btn" type="submit">Send</button>
+</form>
+
                 </div>
             </div>
         @endforeach

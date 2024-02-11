@@ -1,106 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Page Title</title>
-    
+
     <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
-
-    <!-- Add some custom styles -->
-    <style>
-        body {
-            background: linear-gradient(to right, #f0f2f0, #96deda);
-        }
-        .card {
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-        }
-
-        .card:hover {
-            transform: scale(1.02);
-            transition: all 0.3s ease-in-out;
-        }
-
-        .card-body {
-            padding: 1.5rem;
-        }
-
-        .card-title {
-            margin-bottom: 0.5rem;
-        }
-
-        .card-text {
-            margin-bottom: 0.5rem;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            border: 1px solid transparent;
-            border-radius: 0.25rem;
-            font-weight: 600;
-            text-align: center;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .btn-primary {
-            background-color: #4299e1;
-            color: #ffffff;
-        }
-
-        .btn-primary:hover {
-            background-color: #3182ce;
-        }
-    </style>
 </head>
-<body class="bg-gray-100">
 
-<nav class="bg-transparent p-4 ">
+<body class="bg-gradient-to-r from-green-200 to-blue-200 min-h-screen">
 
-    <div class="flex items-center justify-between">
-        <a href="#" class="text-2xl text-gray-800 font-semibold ml-2 mr-7">Task Management</a>
-        <!-- Add the ml-auto class to the div containing the buttons -->
-        <div class="ml-auto">
-            <form method="POST" action="{{ route('logout') }}" class="">
-                @csrf
-                <button type="submit" class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
-            </form>
-        </div>
-    </div> 
-</nav>
-
-<div class="container mx-auto mt-10 p-4 max-w-3xl bg-white rounded-lg shadow-md">
-
-    <h2 class="text-xl font-semibold mb-4">Task List</h2>
-
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        @foreach ($tasks as $task)
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title text-lg font-semibold mb-2">Title: {{ $task->title }}</h5>
-                    <p class="card-text">Description: {{ $task->description }}</p>
-                    <p class="card-text">Assigned to: {{ optional($task->user)->name }}</p>
-                </div>
+    <nav class="bg-transparent p-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <a href="#" class="text-2xl text-gray-800 font-semibold ml-2 mr-7">Task Management</a>
+            <div class="ml-auto">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
+                </form>
             </div>
-        @endforeach
+        </div>
+    </nav>
+
+    <div class="container mx-auto mt-10 p-4 max-w-3xl bg-white rounded-lg shadow-md">
+
+        <h2 class="text-3xl font-semibold mb-4 text-center text-gray-800">Task List</h2>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            @foreach ($tasks as $task)
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+                    <div class="p-6">
+                        <h5 class="text-lg font-semibold mb-2">Title: {{ $task->title }}</h5>
+                        <p class="text-gray-700 mb-2">Description: {{ $task->description }}</p>
+                        <p class="text-gray-700 mb-2">Assigned to: {{ $task->user->name }}</p>
+                        <p class="text-gray-700">Added at: {{ $task->created_at->format('Y-m-d H:i:s') }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+
+        <div class="flex justify-between mt-4">
+            <a href="{{ route('admin.tasks.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-500 transition duration-300">Assign Task</a>
+            <a href="{{ route('admin.dashboard') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-500 transition duration-300">Return to admin dashboard</a>
+        </div>
+
     </div>
-
-    <div class="flex justify-between mt-4">
-        <a href="{{ route('admin.tasks.create') }}" class="btn btn-primary">Assign Task</a>
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-primary">Return to admin dashboard</a>
-    </div>
-
-</div> 
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="//code.jquery.com/jquery.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-<script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
 </body>
+
 </html>

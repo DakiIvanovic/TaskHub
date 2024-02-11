@@ -39,7 +39,12 @@ class UserDashboardController extends Controller
     private function getUserMessages($loggedInUserId, $otherUserId)
     {
         return DB::table('messages')
-            ->select('messages.*', 'senders.name as sender_name', 'receivers.name as receiver_name')
+            ->select(
+                'messages.*',
+                'messages.image_path',
+                'senders.name as sender_name',
+                'receivers.name as receiver_name'
+            )
             ->join('users as senders', 'messages.sender_id', '=', 'senders.id')
             ->join('users as receivers', 'messages.receiver_id', '=', 'receivers.id')
             ->where(function ($query) use ($otherUserId, $loggedInUserId) {
@@ -51,19 +56,29 @@ class UserDashboardController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
     }
-
+    
 
     public function replyStore(Request $request)
-    {
-        $sender = User::find($request->sender_id);
+{
+    $sender = User::find($request->sender_id);
 
-        $newMsg = new Message();
-        $newMsg->text = $request->msg;
-        $newMsg->sender_id = Auth::user()->id;
-        $newMsg->receiver_id = $sender->id;
+    $newMsg = new Message();
+    $newMsg->text = $request->filled('msg') ? $request->input('msg') : ''; // Set a default value if 'msg' is not provided
+    $newMsg->sender_id = Auth::user()->id;
+    $newMsg->receiver_id = $sender->id;
 
-        $newMsg->save();
-
-        return redirect()->route('user.inbox');
+    // Check if an image is uploaded
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images'), $imageName);
+        $newMsg->image_path = 'images/' . $imageName;
     }
+
+    $newMsg->save();
+
+    return redirect()->route('user.inbox');
+}
+    
+
 }

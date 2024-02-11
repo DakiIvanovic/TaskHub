@@ -22,4 +22,7 @@ class Message extends Model
     protected $casts = [
         'created_at' => 'datetime',
     ];
+
+    protected $fillable = ['text', 'sender_id', 'receiver_id', 'image_path'];
+
 }

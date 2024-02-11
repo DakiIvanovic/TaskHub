@@ -10,77 +10,40 @@
 
     <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
-
-
-    <!-- Custom Styles -->
-    <style>
-        body {
-            background: linear-gradient(to right, #f0f2f0, #96deda);
-        }
-
-        .container {
-            margin: 50px auto;
-        }
-
-        .task-container {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .task-container h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-
-        .task-item {
-            padding: 16px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .task-item h3 {
-            font-size: 1.2rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .task-item p {
-            color: #4a5568;
-        }
-    </style>
 </head>
 
-<body>
+<body class="bg-gradient-to-r from-green-200 to-blue-200 min-h-screen">
 
-    <nav class="nav-container p-4 ">
-        <div class="flex items-center justify-between">
+    <nav class="bg-transparent p-4">
+        <div class="container mx-auto flex items-center justify-between">
             <a href="{{route('user.dashboard')}}" class="text-2xl text-gray-800 font-semibold">Task Management</a>
-            <a href="{{ route('user.inbox') }}" class="text-gray-800 hover:text-blue-600 transition duration-300">
-                <i class="fa-regular fa-envelope fa-lg"><span style="margin-left: 10px;">Chat</span></i>
+            <a href="{{ route('user.inbox') }}"
+                class="text-gray-800 hover:text-blue-600 transition duration-300 flex items-center">
+                <i class="far fa-envelope fa-lg mr-2"></i>
+                <span>Chat</span>
             </a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
+                <button type="submit"
+                    class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
             </form>
-            
         </div>
     </nav>
 
     <div class="container mx-auto">
-        <div class="task-container">
-            <h2 class="text-xl font-semibold mb-4">User Dashboard</h2>
+        <div class="bg-white rounded-lg overflow-hidden shadow-md p-6 mt-10">
 
-            <div class="">
-                <h5>Your Assigned Tasks</h5>
+            <h2 class="text-3xl font-semibold mb-4">User Dashboard</h2>
+
+            <div>
+                <h5 class="text-lg font-semibold mb-2">Your Assigned Tasks</h5>
 
                 @foreach ($userTasks as $task)
-                <div class='task-item'>
-                    <h3>Title: {{ $task->title }}</h3>
-                    <p>Description: {{ $task->description }}</p>
-                </div>
+                    <div class='bg-white rounded-md p-4 mb-4 shadow-md'>
+                        <h3 class="text-xl font-semibold mb-2">Title: {{ $task->title }}</h3>
+                        <p class="text-gray-700">Description: {{ $task->description }}</p>
+                        <p class="text-gray-500">Assigned at: {{ $task->created_at->format('Y-m-d H:i:s') }}</p>
+                    </div>
                 @endforeach
             </div>
         </div>
