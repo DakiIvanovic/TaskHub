@@ -13,8 +13,7 @@ class UserDashboardController extends Controller
 {
     public function userTasks()
     {
-        $user = auth()->user();
-        $userTasks = Task::where('assigned_to', $user->id)->get();
+        $userTasks = Task::where('assigned_to', auth()->id())->get();
 
         return view('user.dashboard', compact('userTasks'));
     }
@@ -39,50 +38,37 @@ class UserDashboardController extends Controller
     private function getUserMessages($loggedInUserId, $otherUserId)
     {
         return DB::table('messages')
-            ->select(
-                'messages.*',
-                'messages.image_path',
-                'senders.name as sender_name',
-                'receivers.name as receiver_name'
-            )
-            ->join('users as senders', 'messages.sender_id', '=', 'senders.id')
-            ->join('users as receivers', 'messages.receiver_id', '=', 'receivers.id')
-            ->where(function ($query) use ($otherUserId, $loggedInUserId) {
-                $query->where('sender_id', $loggedInUserId)
-                    ->where('receiver_id', $otherUserId)
-                    ->orWhere('sender_id', $otherUserId)
-                    ->where('receiver_id', $loggedInUserId);
+            ->select('messages.*', 'messages.image_path', 'senders.name as sender_name', 'receivers.name as receiver_name')
+            ->join('users as senders', function ($join) use ($loggedInUserId, $otherUserId) {
+                $join->on('messages.sender_id', '=', 'senders.id')
+                    ->where(function ($query) use ($otherUserId, $loggedInUserId) {
+                        $query->where('sender_id', $loggedInUserId)
+                            ->where('receiver_id', $otherUserId)
+                            ->orWhere('sender_id', $otherUserId)
+                            ->where('receiver_id', $loggedInUserId);
+                    });
             })
+            ->join('users as receivers', 'messages.receiver_id', '=', 'receivers.id')
             ->orderBy('created_at', 'asc')
             ->get();
     }
-    
 
     public function replyStore(Request $request)
     {
-        $sender = User::find($request->sender_id);
-
         $newMsg = new Message();
-        $newMsg->sender_id = Auth::user()->id;
-        $newMsg->receiver_id = $sender->id;
+        $newMsg->sender_id = Auth::id();
+        $newMsg->receiver_id = User::find($request->sender_id)->id;
 
-        // Check if an image is uploaded
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move(public_path('images'), $imageName);
             $newMsg->image_path = 'images/' . $imageName;
-
-            // Check if text is provided
-            $newMsg->text = $request->filled('msg') ? $request->input('msg') : '';
-        } else {
-            // No image provided, set text directly
-            $newMsg->text = $request->filled('msg') ? $request->input('msg') : '';
         }
 
+        $newMsg->text = $request->filled('msg') ? $request->input('msg') : '';
         $newMsg->save();
 
         return redirect()->route('user.inbox');
     }
-
 }

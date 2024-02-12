@@ -7,18 +7,17 @@ use App\Models\User;
 
 class RoleController extends Controller
 {
-    
     /**
-     * Checks if currrently logged user is admin or user and redirects accordingly with data.
+     * Checks if the currently logged user is an admin or a user and redirects accordingly with data.
      */
     public function checkRoleRedirect()
     {
         $user = auth()->user();
 
-        if($user->roles == 'admin'){
-            $users = User::where('roles','user')->get();
+        if ($user->roles === 'admin') {
+            $users = User::where('roles', 'user')->get();
             return view('admin.dashboard', compact('users'));
-        }else{
+        } else {
             $userTasks = Task::where('assigned_to', $user->id)->get();
             return view('user.dashboard', compact('userTasks'));
         }

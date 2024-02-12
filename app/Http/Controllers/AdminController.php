@@ -15,10 +15,9 @@ class AdminController extends Controller
 
         $users = User::where('roles', 'user')
             ->where(function ($queryBuilder) use ($query) {
-                $queryBuilder->where('name', 'like', '%' . $query . '%')
-                    ->orWhere('email', 'like', '%' . $query . '%');
-            })
-            ->get();
+                $queryBuilder->where('name', 'like', "%$query%")
+                    ->orWhere('email', 'like', "%$query%");
+            })->get();
 
         return view('admin.dashboard', compact('query', 'users'));
     }
@@ -31,7 +30,6 @@ class AdminController extends Controller
     public function deleteUser(User $user)
     {
         $this->deleteUserTasks($user);
-
         $user->delete();
 
         return redirect()->back();
@@ -40,28 +38,21 @@ class AdminController extends Controller
     public function updateUser(Request $request, User $user)
     {
         $this->validateUserUpdateRequest($request, $user);
-
-        $user->fill($request->only(['name', 'email']));
-        $user->save();
+        $user->update($request->only(['name', 'email']));
 
         return redirect()->away('/dashboard')->with('success', 'User updated successfully.');
     }
 
     private function deleteUserTasks(User $user)
     {
-        $userTasks = Task::where('assigned_to', $user->id)->get();
-        $userTasks->each->delete();
+        Task::where('assigned_to', $user->id)->delete();
     }
 
     private function validateUserUpdateRequest(Request $request, User $user)
     {
         $request->validate([
             'name' => 'required',
-            'email' => [
-                'required',
-                'email',
-                Rule::unique('users')->ignore($user->id),
-            ],
+            'email' => ['required', 'email', Rule::unique('users')->ignore($user->id)],
         ]);
     }
 }
