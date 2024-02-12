@@ -9,171 +9,70 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
     <!-- Include Font Awesome from CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <style>
-    body {
-        background: linear-gradient(to right, #f0f2f0, #96deda);
-        font-family: 'Poppins', sans-serif;
-        color: #2c3e50;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .chat-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
-    .chat-card {
-        width: calc(33.33% - 20px);
-        margin-bottom: 20px;
-        box-sizing: border-box;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
-        transition: transform 0.3s ease-in-out;
-        cursor: pointer;
-    }
-
-    .chat-card:hover {
-        transform: scale(1.05);
-    }
-
-    .chat-header {
-        padding: 16px;
-        background-color: #3498db;
-        color: #fff;
-        border-bottom: 1px solid #2980b9;
-    }
-
-    .chat-messages {
-        max-height: 200px;
-        overflow-y: auto;
-        padding: 16px;
-    }
-
-    .message-card {
-        margin-bottom: 12px;
-        padding: 8px;
-        background-color: #ecf0f1;
-        border-radius: 4px;
-    }
-
-    .sent-message {
-        background-color: #3498db;
-        color: #fff;
-    }
-
-    .received-message {
-        background-color: #ecf0f1;
-    }
-
-    .reply-container {
-        padding: 16px;
-        border-top: 1px solid #2980b9;
-        transition: transform 0.3s ease-in-out;
-    }
-
-    .reply-container:hover {
-        transform: translateY(-5px);
-    }
-
-    .textarea {
-        width: 100%;
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        margin-bottom: 12px;
-        resize: vertical;
-    }
-
-    .btn {
-        background-color: #3498db;
-        color: #fff;
-        padding: 8px 16px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease-in-out;
-    }
-
-    .btn:hover {
-        background-color: #2980b9;
-    }
-
-    /* Additional styling for responsiveness */
-    @media (max-width: 768px) {
-        .chat-card {
-            width: calc(50% - 20px);
-        }
-    }
-
-    @media (max-width: 480px) {
-        .chat-card {
-            width: 100%;
-        }
-    }
-</style>
-
-<nav class="nav-container p-4">
-        <div class="flex items-center justify-between">
-            <a href="{{ route('user.dashboard') }}" class="text-2xl text-gray-800 font-semibold">Task Management</a>
-            <a href="{{ route('user.dashboard') }}" class="text-gray-800 hover:text-blue-600 transition duration-300" style="float: rightl;">Back</a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
-            </form>
-            
-        </div>
-    </nav>
 </head>
 
-<body class="p-8 relative">
+<body class="bg-gray-100 font-sans">
 
-    <div class="container">
-        <h2 class="text-3xl font-semibold mb-8 text-center">Chats</h2>
-
-        <div class="chat-container">
-                @foreach ($users as $user)
-            <div class="chat-card"> 
-                <div class="chat-header bg-blue-500">
-                    <h3 class="text-xl font-semibold">{{ $user->name }}</h3>
-                </div>
-
-                <div class="chat-messages">
-                @forelse ($userMessages[$user->id] as $message)
-    <div class="message-card {{ $message->sender_id === auth()->id() ? 'sent-message' : 'received-message' }}">
-        <strong>{{ $message->sender_name }}:</strong>
-        @if ($message->image_path)
-            <img src="{{ asset($message->image_path) }}" alt="Image" style="max-width: 200px; max-height: 200px;">
-        @endif
-        {{ $message->text }}
-        <div class="text-white-500 text-sm">{{ $message->created_at }}</div>
-    </div>
-@empty
-    <p class="text-center">No messages yet.</p>
-@endforelse
-
-
-
-                </div>
-
-                <div class="reply-container">
-                <form action="{{ route('user.replyStore') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    <input type="hidden" name="sender_id" value="{{ $user->id }}">
-    <textarea name="msg" rows="4" class="textarea" placeholder="Start a new chat"></textarea>
-    <input type="file" name="image" accept="image/*">
-    <button class="btn" type="submit">Send</button>
-</form>
-
-                </div>
+    <nav class="bg-blue-600 text-white p-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <a href="#" class="text-2xl font-semibold">Task Management</a>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-blue-300 transition duration-300">Back</a>
+                <form method="POST" action="#">
+                    @csrf
+                    <button type="submit" class="hover:text-red-300 transition duration-300">Logout</button>
+                </form>
             </div>
-        @endforeach
+        </div>
+    </nav>
+
+    <div class="container mx-auto p-4">
+        <h2 class="text-2xl font-semibold mb-4 text-center">Chats</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach ($users as $user)
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <div class="bg-blue-500 text-white p-2 rounded-t-lg text-center">
+                        <h3 class="text-lg font-semibold">{{ $user->name }}</h3>
+                    </div>
+
+                    <div class="chat-messages mt-4 h-40 overflow-y-auto">
+                        @forelse ($userMessages[$user->id] as $message)
+                            <div class="{{ $message->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }} p-2 rounded-lg mb-2">
+                                <p class="text-sm">
+                                    <strong>{{ $message->sender_name }}:</strong>
+                                    {{ $message->text }}
+                                </p>
+                                @if ($message->image_path)
+                                    <img src="{{ asset($message->image_path) }}" alt="Image"
+                                        class="mt-1 max-w-full h-16 rounded-lg">
+                                @endif
+                                <div class="text-gray-500 text-xs">{{ $message->created_at }}</div>
+                            </div>
+                        @empty
+                            <p class="text-center text-gray-500">No messages yet.</p>
+                        @endforelse
+                    </div>
+
+                    <div class="reply-container mt-4">
+                        <form action="#" method="POST" enctype="multipart/form-data"
+                            class="flex items-center space-x-2">
+                            @csrf
+                            <input type="hidden" name="sender_id" value="{{ $user->id }}">
+                            <textarea name="msg" rows="2" class="flex-1 p-2 rounded-lg"
+                                placeholder="Type a message..."></textarea>
+                            <label class="flex items-center space-x-2">
+                                <input type="file" name="image" accept="image/*" class="hidden">
+                                <span
+                                    class="bg-blue-500 text-white px-3 py-1 rounded-full cursor-pointer hover:bg-blue-700 transition duration-300">Attach</span>
+                            </label>
+                            <button
+                                class="bg-blue-500 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition duration-300"
+                                type="submit">Send</button>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
         </div>
     </div>
 
