@@ -23,13 +23,12 @@
                     class="bg-blue-500 text-white px-6 py-2 rounded-r transition duration-300 hover:scale-105">Search</button>
             </form>
 
-            <div class="ml-auto space-x-4">
-                <a href="{{ route('admin.tasks.index') }}"
-                    class="text-gray-800 hover:text-blue-600 transition duration-300">Assign Task</a>
+            <div class="flex items-center space-x-4 ml-auto">
+                <a href="{{ route('admin.tasks.index') }}" class="text-gray-800 hover:text-blue-600 transition duration-300">Assign Task</a>
+    
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit"
-                        class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
+                    <button type="submit" class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
                 </form>
             </div>
         </div>
