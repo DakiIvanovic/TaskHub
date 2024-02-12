@@ -7,13 +7,11 @@ use App\Models\User;
 use App\Models\Task;
 use Illuminate\Validation\Rule;
 
-
 class AdminController extends Controller
 {
-
     public function searchUserByNameOrEmail(Request $request)
     {
-        $query = $request->input('query',''); 
+        $query = $request->input('query', '');
 
         $users = User::where('roles', 'user')
             ->where(function ($queryBuilder) use ($query) {
@@ -25,7 +23,6 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('query', 'users'));
     }
 
-
     public function editUser(User $user)
     {
         return view('admin.users.edit', compact('user'));
@@ -33,11 +30,7 @@ class AdminController extends Controller
 
     public function deleteUser(User $user)
     {
-        // Retrieve and delete tasks associated with the user
-        $userTasks = Task::where('assigned_to', $user->id)->get();
-        foreach ($userTasks as $task) {
-            $task->delete();
-        }
+        $this->deleteUserTasks($user);
 
         $user->delete();
 
@@ -45,6 +38,22 @@ class AdminController extends Controller
     }
 
     public function updateUser(Request $request, User $user)
+    {
+        $this->validateUserUpdateRequest($request, $user);
+
+        $user->fill($request->only(['name', 'email']));
+        $user->save();
+
+        return redirect()->away('/dashboard')->with('success', 'User updated successfully.');
+    }
+
+    private function deleteUserTasks(User $user)
+    {
+        $userTasks = Task::where('assigned_to', $user->id)->get();
+        $userTasks->each->delete();
+    }
+
+    private function validateUserUpdateRequest(Request $request, User $user)
     {
         $request->validate([
             'name' => 'required',
@@ -54,15 +63,5 @@ class AdminController extends Controller
                 Rule::unique('users')->ignore($user->id),
             ],
         ]);
-
-        $user->fill([
-            'name' => $request->name,
-            'email' => $request->email,
-        ]);
-
-        $user->save();
-
-        return redirect()->away('/dashboard')->with('success', 'User updated successfully.');
     }
-
 }

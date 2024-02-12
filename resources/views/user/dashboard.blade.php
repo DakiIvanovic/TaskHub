@@ -16,7 +16,8 @@
 
     <nav class="bg-transparent p-4">
         <div class="container mx-auto flex items-center justify-between">
-            <a href="{{route('user.dashboard')}}" class="text-2xl text-gray-800 font-semibold">Task Management</a>
+            <a href="{{ route('user.dashboard') }}" class="text-2xl text-gray-800 font-semibold">Task
+                Management</a>
             <a href="{{ route('user.inbox') }}"
                 class="text-gray-800 hover:text-blue-600 transition duration-300 flex items-center">
                 <i class="far fa-envelope fa-lg mr-2"></i>
@@ -24,8 +25,7 @@
             </a>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit"
-                    class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
+                <button type="submit" class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
             </form>
         </div>
     </nav>
@@ -38,11 +38,12 @@
             <div>
                 <h5 class="text-lg font-semibold mb-2">Your Assigned Tasks</h5>
 
-                @foreach ($userTasks as $task)
+                @foreach($userTasks as $task)
                     <div class='bg-white rounded-md p-4 mb-4 shadow-md'>
                         <h3 class="text-xl font-semibold mb-2">Title: {{ $task->title }}</h3>
                         <p class="text-gray-700">Description: {{ $task->description }}</p>
-                        <p class="text-gray-500">Assigned at: {{ $task->created_at->format('Y-m-d H:i:s') }}</p>
+                        <p class="text-gray-500">Assigned at:
+                            {{ $task->created_at->format('Y-m-d H:i:s') }}</p>
                     </div>
                 @endforeach
             </div>

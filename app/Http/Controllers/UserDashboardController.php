@@ -13,8 +13,7 @@ class UserDashboardController extends Controller
 {
     public function userTasks()
     {
-        $user = auth()->user();
-        $userTasks = Task::where('assigned_to', $user->id)->get();
+        $userTasks = Task::where('assigned_to', auth()->id())->get();
 
         return view('user.dashboard', compact('userTasks'));
     }
@@ -22,18 +21,29 @@ class UserDashboardController extends Controller
     public function userInbox()
     {
         $loggedInUserId = auth()->id();
-
-        $users = User::where('id', '!=', $loggedInUserId)
-            ->where('roles', 'user')
-            ->get();
-
-        $userMessages = [];
-        foreach ($users as $user) {
-            $messages = $this->getUserMessages($loggedInUserId, $user->id);
-            $userMessages[$user->id] = $messages;
-        }
+        $users = $this->getOtherUsers($loggedInUserId);
+        $userMessages = $this->getUserMessagesForUsers($loggedInUserId, $users);
 
         return view('user.inbox', compact('users', 'userMessages'));
+    }
+
+    private function getOtherUsers($loggedInUserId)
+    {
+        return User::where('id', '!=', $loggedInUserId)
+            ->where('roles', 'user')
+            ->get();
+    }
+
+    private function getUserMessagesForUsers($loggedInUserId, $users)
+    {
+        $userMessages = collect();
+
+        foreach ($users as $user) {
+            $messages = $this->getUserMessages($loggedInUserId, $user->id);
+            $userMessages->put($user->id, $messages);
+        }
+
+        return $userMessages;
     }
 
     private function getUserMessages($loggedInUserId, $otherUserId)
@@ -56,30 +66,40 @@ class UserDashboardController extends Controller
             ->orderBy('created_at', 'asc')
             ->get();
     }
-    
 
     public function replyStore(Request $request)
-{
-    $sender = User::find($request->sender_id);
+    {
+        $this->validateReplyRequest($request);
 
-    $newMsg = new Message();
-    $newMsg->text = $request->input('msg', ''); // Set a default value if 'msg' is not provided
-    $newMsg->sender_id = Auth::user()->id;
-    $newMsg->receiver_id = $sender->id;
+        $sender = User::find($request->sender_id);
 
-    // Check if an image is uploaded
-    if ($request->hasFile('image')) {
-        $image = $request->file('image');
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('images'), $imageName);
-        $newMsg->image_path = 'images/' . $imageName;
+        $newMsg = Message::create([
+            'text' => $request->input('msg', ''),
+            'sender_id' => Auth::user()->id,
+            'receiver_id' => $sender->id,
+        ]);
+
+        $this->uploadAndSaveImage($request, $newMsg);
+
+        return redirect()->route('user.inbox');
     }
 
-    $newMsg->save();
+    private function validateReplyRequest(Request $request)
+    {
+        $this->validate($request, [
+            'msg' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png|max:2048',
+        ]);
+    }
 
-    return redirect()->route('user.inbox');
-}
-    
-    
-
+    private function uploadAndSaveImage(Request $request, Message $newMsg)
+    {
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $newMsg->image_path = 'images/' . $imageName;
+            $newMsg->save();
+        }
+    }
 }
