@@ -63,7 +63,7 @@ class UserDashboardController extends Controller
     $sender = User::find($request->sender_id);
 
     $newMsg = new Message();
-    $newMsg->text = $request->filled('msg') ? $request->input('msg') : ''; // Set a default value if 'msg' is not provided
+    $newMsg->text = $request->input('msg', ''); // Set a default value if 'msg' is not provided
     $newMsg->sender_id = Auth::user()->id;
     $newMsg->receiver_id = $sender->id;
 
@@ -79,6 +79,7 @@ class UserDashboardController extends Controller
 
     return redirect()->route('user.inbox');
 }
+    
     
 
 }

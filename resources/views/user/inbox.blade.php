@@ -139,7 +139,7 @@
 
         <div class="chat-container">
                 @foreach ($users as $user)
-            <div class="chat-card">
+            <div class="chat-card"> 
                 <div class="chat-header bg-blue-500">
                     <h3 class="text-xl font-semibold">{{ $user->name }}</h3>
                 </div>
@@ -150,14 +150,14 @@
         <strong>{{ $message->sender_name }}:</strong>
         @if ($message->image_path)
             <img src="{{ asset($message->image_path) }}" alt="Image" style="max-width: 200px; max-height: 200px;">
-        @else
-            {{ $message->text }}
         @endif
+        {{ $message->text }}
         <div class="text-white-500 text-sm">{{ $message->created_at }}</div>
     </div>
 @empty
     <p class="text-center">No messages yet.</p>
 @endforelse
+
 
 
                 </div>
