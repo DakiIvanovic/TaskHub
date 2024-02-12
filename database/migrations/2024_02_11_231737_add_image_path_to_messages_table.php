@@ -9,12 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::table('messages', function (Blueprint $table) {
-            $table->string('image_path')->nullable();
-        });
-    }
+    public function up()
+{
+    Schema::table('messages', function (Blueprint $table) {
+        $table->string('image_path')->nullable();
+    });
+}
 
     /**
      * Reverse the migrations.
