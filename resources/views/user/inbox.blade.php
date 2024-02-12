@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="reply-container mt-4">
-                        <form action="#" method="POST" enctype="multipart/form-data"
+                        <form action="{{ route('user.replyStore') }}" method="POST" enctype="multipart/form-data"
                             class="flex items-center space-x-2">
                             @csrf
                             <input type="hidden" name="sender_id" value="{{ $user->id }}">
@@ -66,9 +66,7 @@
                                 <span
                                     class="bg-blue-500 text-white px-3 py-1 rounded-full cursor-pointer hover:bg-blue-700 transition duration-300">Attach</span>
                             </label>
-                            <button
-                                class="bg-blue-500 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition duration-300"
-                                type="submit">Send</button>
+                            <button class="bg-blue-500 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition duration-300" type="submit">Send</button>
                         </form>
                     </div>
                 </div>
