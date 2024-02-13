@@ -10,27 +10,14 @@
 
     <!-- Include Tailwind CSS from CDN -->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.15/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- External CSS file for custom styles -->
+    <link href="{{ asset('css/user.css') }}" rel="stylesheet">
 </head>
 
 <body class="bg-gradient-to-r from-green-200 to-blue-200 min-h-screen">
 
-    <nav class="bg-transparent p-4">
-        <div class="container mx-auto flex items-center justify-between">
-            <a href="{{ route('user.dashboard') }}" class="text-2xl text-gray-800 font-semibold">Task
-                Management</a>
-            <a href="{{ route('user.inbox') }}"
-                class="text-gray-800 hover:text-blue-600 transition duration-300 flex items-center">
-                <i class="far fa-envelope fa-lg mr-2"></i>
-                <span>Chat</span>
-            </a>
-            <form method="POST" action="{{ route('logout') }}" class="flex items-center">
-                @csrf
-                <p class="mr-2">Hello, {{ auth()->user()->name }}</p>
-                <button type="submit" class="text-gray-800 hover:text-red-600 transition duration-300">Logout</button>
-                <a href=""></a>
-            </form>
-        </div>
-    </nav>
+    @include('partials.user-header')
 
     <div class="container mx-auto">
         <div class="bg-white rounded-lg overflow-hidden shadow-md p-6 mt-10">
@@ -40,14 +27,7 @@
             <div>
                 <h5 class="text-lg font-semibold mb-2">Your Assigned Tasks</h5>
 
-                @foreach($userTasks as $task)
-                    <div class='bg-white rounded-md p-4 mb-4 shadow-md'>
-                        <h3 class="text-xl font-semibold mb-2">Title: {{ $task->title }}</h3>
-                        <p class="text-gray-700">Description: {{ $task->description }}</p>
-                        <p class="text-gray-500">Assigned at:
-                            {{ $task->created_at->format('Y-m-d H:i:s') }}</p>
-                    </div>
-                @endforeach
+                @include('partials.user-tasks', ['tasks' => $userTasks])
             </div>
         </div>
     </div>
@@ -58,6 +38,8 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script src="//stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+    <!-- External JavaScript file for custom scripts -->
+    <script src="{{ asset('js/user.js') }}"></script>
 </body>
 
 </html>
