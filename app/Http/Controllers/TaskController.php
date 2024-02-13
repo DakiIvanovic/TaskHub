@@ -10,27 +10,22 @@ class TaskController extends Controller
 {
     public function retrieveUsers()
     {
-        $users = User::where('roles', User::ROLE_USER)->get();
-        return view('admin.tasks.create', compact('users'));
+        return view('admin.tasks.create', ['users' => User::where('roles', User::ROLE_USER)->get()]);
     }
 
     public function retrieveTasks()
     {
-        $tasks = Task::with('user')->get();
-        $users = User::where('roles', User::ROLE_USER)->get();
-
-        return view('admin.tasks.index', compact('tasks', 'users'));
+        return view('admin.tasks.index', [
+            'tasks' => Task::with('user')->get(),
+            'users' => User::where('roles', User::ROLE_USER)->get(),
+        ]);
     }
 
     public function saveTask(Request $request)
     {
         $this->validateTaskRequest($request);
 
-        Task::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'assigned_to' => $request->assigned_to,
-        ]);
+        Task::create($request->only(['title', 'description', 'assigned_to']));
 
         return redirect()->route('admin.tasks.index')->with('success', 'Task assigned successfully!');
     }
