@@ -14,6 +14,7 @@ Route::middleware(['auth', 'role:' . User::ROLE_USER])->group(function () {
     Route::get('/dashboard', [UserDashboardController::class, 'userTasks']);
     Route::get('/user/inbox', [UserDashboardController::class, 'userInbox'])->name('user.inbox');
     Route::post('/user/messages/reply', [UserDashboardController::class, 'replyStore'])->name('user.replyStore');
+    Route::get('/user/inbox', [UserDashboardController::class, 'searchChatByNameOrEmail'])->name('user.inbox');
 });
 
 Route::middleware(['auth', 'role:' . User::ROLE_ADMIN])->group(function () {

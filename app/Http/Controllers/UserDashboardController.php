@@ -35,6 +35,28 @@ class UserDashboardController extends Controller
         return view('user.inbox', compact('users', 'userMessages'));
     }
 
+    public function searchChatByNameOrEmail(Request $request){
+
+        $searchQueryInbox = $request->input('searchQueryInbox', ''); 
+
+        $users = User::where('roles', 'user')
+            ->where(function ($queryBuilder) use ($searchQueryInbox) {
+                $queryBuilder->where('name', 'like', "%$searchQueryInbox%")
+                    ->orWhere('email', 'like', "%$searchQueryInbox%");
+            })->get();
+
+            $loggedInUserId = auth()->id();
+
+            $userMessages = [];
+            foreach ($users as $user) {
+                $messages = $this->getUserMessages($loggedInUserId, $user->id);
+                $userMessages[$user->id] = $messages;
+            }
+
+        return view('user.inbox', compact('searchQueryInbox', 'users', 'userMessages'));
+
+    }
+
     private function getUserMessages($loggedInUserId, $otherUserId)
     {
         return DB::table('messages')

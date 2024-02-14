@@ -1,13 +1,13 @@
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
     @foreach ($users as $user)
                 <div class="bg-white p-4 rounded-lg shadow-md">
-                    <div class="bg-blue-500 text-white p-2 rounded-t-lg text-center">
+                    <div class="bg-pink-500 text-white p-2 rounded-t-lg text-center">
                         <h3 class="text-lg font-semibold">{{ $user->name }}</h3>
                     </div>
 
                     <div class="chat-messages mt-4 h-40 overflow-y-auto">
                         @forelse ($userMessages[$user->id] as $message)
-                            <div class="{{ $message->sender_id === auth()->id() ? 'bg-blue-500 text-white' : 'bg-gray-200' }} p-2 rounded-lg mb-2">
+                            <div class="{{ $message->sender_id === auth()->id() ? 'bg-gray-500 text-white' : 'bg-gray-200' }} p-2 rounded-lg mb-2">
                                 <p class="text-sm">
                                     <strong>{{ $message->sender_name }}:</strong>
                                     {{ $message->text }}
@@ -33,9 +33,9 @@
                             <label class="flex items-center space-x-2">
                                 <input type="file" name="image" accept="image/*" class="hidden">
                                 <span
-                                    class="bg-blue-500 text-white px-3 py-1 rounded-full cursor-pointer hover:bg-blue-700 transition duration-300">Attach</span>
+                                    class="bg-pink-500 text-white px-3 py-1 rounded-full cursor-pointer hover:bg-blue-700 transition duration-300">Attach</span>
                             </label>
-                            <button class="bg-blue-500 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition duration-300" type="submit">Send</button>
+                            <button class="bg-pink-500 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition duration-300" type="submit">Send</button>
                         </form>
                     </div>
                 </div>
