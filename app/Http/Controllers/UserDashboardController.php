@@ -21,41 +21,48 @@ class UserDashboardController extends Controller
     public function userInbox()
     {
         $loggedInUserId = auth()->id();
+        $users = $this->getUsersForInbox($loggedInUserId);
 
-        $users = User::where('id', '!=', $loggedInUserId)
-            ->where('roles', 'user')
-            ->get();
+        $userMessages = $this->getUserMessagesForUsers($loggedInUserId, $users);
 
+        return view('user.inbox', compact('users', 'userMessages'));
+    }
+
+    public function searchChatByNameOrEmail(Request $request)
+    {
+        $searchQueryInbox = $request->input('searchQueryInbox', '');
+        $loggedInUserId = auth()->id();
+
+        $users = User::where('roles', 'user')
+            ->where('id', '!=', $loggedInUserId)
+            ->where(function ($queryBuilder) use ($searchQueryInbox) {
+                $queryBuilder->where('name', 'like', "%$searchQueryInbox%")
+                    ->orWhere('email', 'like', "%$searchQueryInbox%");
+            })->get();
+
+        $userMessages = $this->getUserMessagesForUsers($loggedInUserId, $users);
+
+        return view('user.inbox', compact('searchQueryInbox', 'users', 'userMessages'));
+    }
+
+    private function getUserMessagesForUsers($loggedInUserId, $users)
+    {
         $userMessages = [];
         foreach ($users as $user) {
             $messages = $this->getUserMessages($loggedInUserId, $user->id);
             $userMessages[$user->id] = $messages;
         }
 
-        return view('user.inbox', compact('users', 'userMessages'));
+        return $userMessages;
     }
 
-    public function searchChatByNameOrEmail(Request $request){
-
-        $searchQueryInbox = $request->input('searchQueryInbox', ''); 
-
-        $users = User::where('roles', 'user')
-            ->where(function ($queryBuilder) use ($searchQueryInbox) {
-                $queryBuilder->where('name', 'like', "%$searchQueryInbox%")
-                    ->orWhere('email', 'like', "%$searchQueryInbox%");
-            })->get();
-
-            $loggedInUserId = auth()->id();
-
-            $userMessages = [];
-            foreach ($users as $user) {
-                $messages = $this->getUserMessages($loggedInUserId, $user->id);
-                $userMessages[$user->id] = $messages;
-            }
-
-        return view('user.inbox', compact('searchQueryInbox', 'users', 'userMessages'));
-
+    private function getUsersForInbox($loggedInUserId)
+    {
+        return User::where('id', '!=', $loggedInUserId)
+            ->where('roles', 'user')
+            ->get();
     }
+
 
     private function getUserMessages($loggedInUserId, $otherUserId)
     {
