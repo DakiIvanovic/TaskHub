@@ -1,4 +1,4 @@
-<form method="GET" action="{{ url('/user/inbox') }}" class="flex items-center">
+<form method="GET" action="{{ url('/user/inbox') }}" z>
     <input type="text" name="searchQueryInbox"
         value="{{ isset($query) ? $query : '' }}"
         placeholder="Search by name or email" class="px-4 py-2 border rounded-l">

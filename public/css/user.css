@@ -1,3 +1,102 @@
-.bg-transparent {
-    background-color: transparent !important;
+/* user.css */
+
+/* Navigation Styles */
+nav {
+    background-color: #4299e1;
+    padding: 1rem;
+}
+
+nav a {
+    color: #ffffff;
+    text-decoration: none;
+    margin-right: 20px;
+}
+
+nav a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+nav form {
+    display: flex;
+    align-items: center;
+}
+
+nav p {
+    color: #ffffff;
+    margin-right: 10px;
+}
+
+nav button {
+    background-color: #ffffff;
+    color: #4299e1;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Dashboard Styles */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+}
+
+.bg-white {
+    background-color: #ffffff;
+}
+
+.rounded {
+    border-radius: 8px;
+}
+
+.shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.mb-8 {
+    margin-bottom: 2rem;
+}
+
+.p-8 {
+    padding: 2rem;
+}
+
+.text-2xl {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.text-lg {
+    font-size: 1.125rem;    
+    font-weight: 600;
+}
+
+.font-semibold {
+    font-weight: 600;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.text-xl {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.text-gray-600 {
+    color: #4a5568;
+}
+
+.text-gray-500 {
+    color: #718096;
+}
+
+/* Add horizontal rule styles */
+hr {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    border: 0;
+    border-top: 1px solid #e2e8f0;
 }

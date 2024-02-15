@@ -17,8 +17,6 @@
 
     @include('partials.chat-interface-header', ['users' => $users])
 
-    @include('partials.search-form-inbox')
-
     <div class="container mx-auto p-4">
         <h2 class="text-2xl font-semibold mb-4 text-center">Chats</h2>
 
