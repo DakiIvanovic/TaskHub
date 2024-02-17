@@ -11,12 +11,6 @@ header {
     text-align: center;
 }
 
-nav {
-    background-color: #3498db;
-    padding: 1rem 0;
-    text-align: center;
-}
-
 nav a {
     color: #ecf0f1;
     text-decoration: none;

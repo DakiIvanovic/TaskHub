@@ -3,13 +3,6 @@ body {
     background-color: #f4f4f4;
     color: #333;
 }
-
-nav {
-    background-color: #3498db;
-    padding: 1rem 0;
-    text-align: center;
-}
-
 nav a {
     color: #ecf0f1;
     text-decoration: none;

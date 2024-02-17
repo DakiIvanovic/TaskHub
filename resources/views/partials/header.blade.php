@@ -1,4 +1,4 @@
-<nav class="bg-blue-600 py-4">
+<nav class="bg-gray-800 p-4 flex items-center justify-between text-white">
     <div class="container mx-auto flex justify-between items-center">
         <a href="{{  route('admin.dashboard') }}" class="text-white text-2xl font-bold">Task Management</a>
 

@@ -13,18 +13,19 @@
     <link href="{{ asset('css/chat-interface.css') }}" rel="stylesheet">
 </head>
 
-<body class="bg-gray-100 font-sans">
+<body>
 
     @include('partials.chat-interface-header', ['users' => $users])
 
-    <div class="container mx-auto p-4">
-        <h2 class="text-2xl font-semibold mb-4 text-center">Chats</h2>
-
+    <div>
         @include('partials.chat-cards', ['users' => $users, 'userMessages' => $userMessages])
     </div>
 
-    <!-- External JavaScript file for custom scripts -->
     <script src="{{ asset('js/chat-interface.js') }}"></script>
+
+    @include('partials.footer')
+
+
 </body>
 
 </html>

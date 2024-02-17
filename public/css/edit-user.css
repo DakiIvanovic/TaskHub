@@ -4,15 +4,6 @@ body {
     color: #333;
 }
 
-header {
-    background-color: #4a90e2;
-    padding: 10px 10px;
-    text-align: center;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
 header h1 {
     color: #fff;
     font-size: 24px;

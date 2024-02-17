@@ -1,44 +1,53 @@
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<div class="grid grid-cols-3 gap-4">
     @foreach($users as $user)
-        <div class="bg-white p-4 rounded-lg shadow-md">
-            <div class="bg-pink-500 text-white p-2 rounded-t-lg text-center">
-                <h3 class="text-lg font-semibold">{{ $user->name }}</h3>
+        <div class="card bg-white shadow-lg rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 ease-in-out">
+            <div class="card-header p-4 flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-gray-800">{{ $user->name }}</h3>
+                <div class="flex items-center space-x-2">
+                    @if($user->online)
+                        <span class="text-sm text-green-500">Online</span>
+                        <span class="w-3 h-3 bg-green-500 rounded-full"></span>
+                    @else
+                        <span class="text-sm text-gray-500">Offline</span>
+                        <span class="w-3 h-3 bg-gray-500 rounded-full"></span>
+                    @endif
+                </div>
             </div>
 
-            <div class="chat-messages mt-4 h-40 overflow-y-auto">
+            <div class="card-body p-4 h-48 overflow-y-auto">
                 @forelse($userMessages[$user->id] as $message)
                     <div
-                        class="{{ $message->sender_id === auth()->id() ? 'bg-gray-500 text-white' : 'bg-gray-200' }} p-2 rounded-lg mb-2">
+                        class="message {{ $message->sender_id === auth()->id() ? 'self' : 'other' }}">
                         <p class="text-sm">
-                            <strong>{{ $message->sender_name }}:</strong>
+                            <strong class="text-gray-800">{{ $message->sender_name }}:</strong>
                             {{ $message->text }}
                         </p>
                         @if($message->image_path)
                             <img src="{{ asset($message->image_path) }}" alt="Image"
-                                class="mt-1 max-w-full h-16 rounded-lg">
+                                class="w-32 h-32 object-cover mt-2 rounded-lg">
                         @endif
-                        <div class="text-gray-500 text-xs">{{ $message->created_at }}</div>
+                        <div class="text-xs text-gray-500">{{ $message->created_at }}</div>
                     </div>
                 @empty
-                    <p class="text-center text-gray-500">No messages yet.</p>
+                    <p class="text-sm text-gray-600">No messages yet.</p>
                 @endforelse
             </div>
 
-            <div class="reply-container mt-4">
+            <div class="card-footer p-4 flex items-center space-x-4">
                 <form action="{{ route('user.replyStore') }}" method="POST"
-                    enctype="multipart/form-data" class="flex items-center space-x-2">
+                    enctype="multipart/form-data" class="flex-1">
                     @csrf
                     <input type="hidden" name="sender_id" value="{{ $user->id }}">
-                    <textarea name="msg" rows="2" class="flex-1 p-2 rounded-lg"
-                        placeholder="Type a message..."></textarea>
-                    <label class="flex items-center space-x-2">
-                        <input type="file" name="image" accept="image/*" class="hidden">
-                        <span
-                            class="bg-pink-500 text-white px-3 py-1 rounded-full cursor-pointer hover:bg-blue-700 transition duration-300">Attach</span>
-                    </label>
-                    <button
-                        class="bg-pink-500 text-white px-4 py-1 rounded-full hover:bg-blue-700 transition duration-300"
-                        type="submit">Send</button>
+                    <div class="flex items-center space-x-2">
+                        <textarea name="msg" rows="1" class="flex-1 border border-gray-300 rounded-lg p-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type a message..."></textarea>
+                        <label class="flex items-center justify-center w-10 h-10 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition-colors duration-200 ease-in-out">
+                            <input type="file" name="image" accept="image/*" class="hidden">
+                            <i class="fas fa-paperclip text-gray-600"></i>
+                        </label>
+                        <button class="flex items-center justify-center w-10 h-10 bg-blue-500 rounded-lg text-white hover:bg-blue-600 transition-colors duration-200 ease-in-out" type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
