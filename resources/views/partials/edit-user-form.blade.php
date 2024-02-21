@@ -36,11 +36,13 @@
             </div>
 
             <div>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" disabled>Update User</button>
+                <button id="submitButton" type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700" disabled>Update User</button>
                 <a href="{{ route('admin.dashboard') }}" class="text-gray-600 hover:text-blue-500">Cancel</a>
             </div>
         </form>
     </div>
+
+    <script src="{{ asset('js/edit-user.js') }}"></script>
 
     @include('partials.footer')
 
