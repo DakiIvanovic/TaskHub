@@ -5,7 +5,7 @@
         @include('partials.search-form')
 
         <div class="ml-4">
-            <a href="{{ route('admin.tasks.index') }}" class="text-white hover:underline">Assign Task</a>
+            <a href="{{ route('admin.tasks.index') }}" class="text-white hover:underline">Task list</a>
             @include('partials.logout-form')
         </div>
     </div>
